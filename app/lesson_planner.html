@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Планировщик расписания</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand navbar-light bg-light">
+        <div class="container-fluid">
+            <div class="d-flex flex-wrap align-items-center">
+                <a class="navbar-brand me-4" href="#">Логотип</a>
+                <div class="navbar-nav flex-wrap">
+                    <a class="nav-link" href="#">Расписание</a>
+                    <a class="nav-link" href="#">Загруженность аудиторий</a>
+                    <a class="nav-link" href="#">Редактирование расписания</a>
+                    <a class="nav-link" href="#">Редактирование данных</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>   
+<div class="container-fluid mt-4">
+    <div class="row mb-5">
+        <div class="col-md-auto">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h2 class="h4 mb-0">Добавить новое занятие</h2>
+                </div>
+                <div class="card-body">
+                    <form id="timeslotForm">
+                        <div class="mb-3">
+                            <input type="date" class="form-control" id="lessonDate" />
+                        </div>
+                        <label for="lessonNumber" class="form-label">Номер пары</label>
+                        <div class="mb-3 btn-group w-100" id="lessonNumber" role="group" aria-label="Номер пары">
+                            <button type="button" class="btn btn-secondary">1</button>
+                            <button type="button" class="btn btn-secondary">2</button>
+                            <button type="button" class="btn btn-secondary">3</button>
+                            <button type="button" class="btn btn-secondary">4</button>
+                            <button type="button" class="btn btn-secondary">5</button>
+                            <button type="button" class="btn btn-secondary">6</button>
+                            <button type="button" class="btn btn-secondary">7</button>
+                        </div>
+                        <div class="mb-3">
+                            <select class="form-select" id="timeslotCourseId" required>
+                                <option value="" disabled selected>Выберите дисциплину</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <select class="form-select" id="timesloRoomId" required>
+                                <option value="" disabled selected>Выберите аудиторию</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">
+                            <i class="bi bi-plus-circle me-2"></i>Добавить занятие
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col"></div>
+    </div>
+    <div class="row mb-5">
+        <div class="col">
+            <div class="btn-group" role="group" aria-label="Переключение вида">
+                <button type="button" class="btn btn-secondary view-btn" id="list-view-btn">Список</button>
+                <button type="button" class="btn btn-secondary view-btn" id="grid-view-btn">Сетка</button>
+            </div>
+        </div>
+    </div>
+    <div class="card" id="schedule-container">
+    </div>
+</div>
+<script src="js/lesson_planner.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
