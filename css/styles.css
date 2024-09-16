@@ -31,6 +31,10 @@
     background-color: #e9ecef;
 }
 
+.table caption {
+    caption-side: top;
+}
+
 .list-view ul.schedule-list {
     list-style-type: none;
     padding: 0;
