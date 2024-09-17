@@ -7,4 +7,4 @@ else
     ./.venv/Scripts/activate
 fi
 cd server
-uvicorn main:app --reload
+uvicorn app.main:app --reload

@@ -1,4 +1,6 @@
 if not exist .venv (
+    sudo apt update
+    sudo apt install python3-virtualenv
     python -m venv .venv 
     call ./.venv/Scripts/activate
     pip install -r requirements.txt
@@ -6,4 +8,4 @@ if not exist .venv (
     call ./.venv/Scripts/activate
 )
 cd server
-uvicorn main:app --reload
+uvicorn app.main:app --reload

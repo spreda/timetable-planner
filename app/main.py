@@ -7,7 +7,7 @@ from database import engine, Base
 app = FastAPI(title="Schedule Planner API")
 
 # Serve static pages
-app.mount("/", StaticFiles(directory="../", html = True), name="static")
+app.mount("/", StaticFiles(directory="../static", html = True), name="static")
 
 # Configure templates directory
 templates = Jinja2Templates(directory="templates")
