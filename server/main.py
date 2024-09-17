@@ -1,14 +1,19 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from database import engine, Base
 
 app = FastAPI(title="Schedule Planner API")
 
+# Serve static pages
+app.mount("/", StaticFiles(directory="../", html = True), name="static")
+
+# Configure templates directory
+templates = Jinja2Templates(directory="templates")
+
 # Create database tables
 Base.metadata.create_all(bind=engine)
-
-@app.get("/")
-async def root():
-    return {"message": "Welcome to the Schedule Planner API"}
 
 if __name__ == "__main__":
     import uvicorn
