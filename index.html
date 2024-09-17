@@ -13,11 +13,11 @@
     <nav class="navbar navbar-expand navbar-light bg-light">
         <div class="container-fluid">
             <div class="d-flex flex-wrap align-items-center">
-                <a class="navbar-brand me-4" href="#">Логотип</a>
+                <a class="navbar-brand me-4" href="/index.html">Логотип</a>
                 <div class="navbar-nav flex-wrap">
-                    <a class="nav-link" href="#">Расписание</a>
+                    <a class="nav-link" href="/index.html">Расписание</a>
                     <a class="nav-link" href="#">Загруженность аудиторий</a>
-                    <a class="nav-link" href="#">Редактирование расписания</a>
+                    <a class="nav-link" href="/shift_schedules.html">График преподавателей</a>
                     <a class="nav-link" href="#">Редактирование данных</a>
                 </div>
             </div>
@@ -25,7 +25,7 @@
     </nav>
 </header>   
 <div class="container-fluid mt-4">
-    <div class="row mb-5">
+    <div class="row mb-3">
         <div class="col-md-auto">
             <div class="card">
                 <div class="card-header bg-success text-white">
@@ -47,13 +47,23 @@
                             <button type="button" class="btn btn-secondary">7</button>
                         </div>
                         <div class="mb-3">
-                            <select class="form-select" id="timeslotCourseId" required>
-                                <option value="" disabled selected>Выберите дисциплину</option>
+                            <select class="form-select" id="timeslotGroupId" required>
+                                <option value="" disabled selected>Группа</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <select class="form-select" id="timeslotCoursetId" required>
+                                <option value="" disabled selected>Предмет</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <select class="form-select" id="timeslotLessonTypeId" required>
+                                <option value="" disabled selected>Вид занятия</option>
                             </select>
                         </div>
                         <div class="mb-3">
                             <select class="form-select" id="timesloRoomId" required>
-                                <option value="" disabled selected>Выберите аудиторию</option>
+                                <option value="" disabled selected>Ааудитория</option>
                             </select>
                         </div>
                         <button type="submit" class="btn btn-success w-100">
@@ -65,7 +75,16 @@
         </div>
         <div class="col"></div>
     </div>
-    <div class="row mb-5">
+    <div class="row mb-3">
+        <div class="col">
+            <div class="btn-group" role="group" aria-label="Переключение вида">
+                <button type="button" class="btn btn-secondary view-btn" id="group-view-btn">Группа</button>
+                <button type="button" class="btn btn-secondary view-btn" id="proffesor-view-btn">Преподаватель</button>
+                <button type="button" class="btn btn-secondary view-btn" id="room-view-btn">Аудитория</button>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-3">
         <div class="col">
             <div class="btn-group" role="group" aria-label="Переключение вида">
                 <button type="button" class="btn btn-secondary view-btn" id="list-view-btn">Список</button>

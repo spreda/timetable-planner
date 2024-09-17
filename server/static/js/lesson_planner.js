@@ -39,7 +39,7 @@ function listView(schedule, timetable) {
                 <tr>
                     <th>Дата</th>
                     <th>Номер пары</th>
-                    <th>Дисциплина</th>
+                    <th>Предмет</th>
                     <th>Тип</th>
                     <th>Преподаватель</th>
                     <th>Аудитория</th>
@@ -116,7 +116,7 @@ function updateCourseSelect() {
     lessonDate = document.getElementById('lessonDate');
     lessonDate.value = new Date().toISOString().substring(0, 10);
     courseSelect = document.getElementById('timeslotCourseId');
-    courseSelect.innerHTML = '<option value="" disabled selected>Выберите дисциплину</option>';
+    courseSelect.innerHTML = '<option value="" disabled selected>Предмет</option>';
     courses.forEach(course => {
         const option = document.createElement('option');
         option.value = course.id;
