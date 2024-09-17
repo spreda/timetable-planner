@@ -1,4 +1,5 @@
 #!/bin/bash
+DEBUG=true
 if [ ! -d ".venv" ]; then
     python -m venv .venv
     ./.venv/Scripts/activate

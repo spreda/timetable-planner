@@ -1,3 +1,4 @@
+set DEBUG="true"
 if not exist .venv (
     sudo apt update
     sudo apt install python3-virtualenv
