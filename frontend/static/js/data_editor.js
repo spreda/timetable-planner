@@ -1,3 +1,4 @@
+import { Schedule, schedule } from "./classes/Schedule.js";
 import { ButtonRow } from "./UIComponents/Buttons.js";
 
 let btnRow = new ButtonRow([

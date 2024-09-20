@@ -45,13 +45,13 @@
     border-bottom: 1px solid #ddd;
 }
 
-.grid-view .schedule-grid {
+.table-view .schedule-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
 }
 
-.grid-view .schedule-grid div {
+.table-view .schedule-grid div {
     padding: 20px;
     background-color: #f0f0f0;
     border: 1px solid #ddd;
@@ -63,7 +63,12 @@
 }
 
 .btn-group .btn.active, .btn:hover {
-    background-color: #6c757d;
-    border-color: #6c757d;
+    background-color: #22b272;
+    border-color: #22b272;
     color: white;
+}
+
+.bg-info {
+    background-color:#ffffff !important;
+    color:#343a40 !important;
 }
