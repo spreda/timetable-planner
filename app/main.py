@@ -4,16 +4,19 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.routing import Route, WebSocketRoute
 import arel, os
+import mimetypes
 
 from database import engine, Base
 
+
+custom_mimetype = mimetypes.add_type("application/javascript", ".js", True)
 
 # Configure templates directory
 templates = Jinja2Templates(directory="../frontend/templates")
 
 DEBUG = os.getenv("DEBUG")
 if _debug := DEBUG:
-    hotreload = arel.HotReload(paths=[arel.Path("../frontend/templates")])
+    hotreload = arel.HotReload(paths=[arel.Path("../frontend")])
     templates.env.globals["DEBUG"] = DEBUG
     templates.env.globals["hotreload"] = hotreload
     app = FastAPI(
@@ -34,7 +37,7 @@ Base.metadata.create_all(bind=engine)
 
 @app.get("/{page_name}", response_class=HTMLResponse)
 async def render(page_name, request: Request):
-    return templates.TemplateResponse(f"{page_name}", {"request": request})
+    return templates.TemplateResponse(f"{page_name}", {"request": request}, mimetypes=custom_mimetype)
 
 routes: list = [
     Route("/", render),

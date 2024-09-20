@@ -1,8 +1,6 @@
 #!/bin/bash
 DEBUG=true
 if [ ! -d ".venv" ]; then
-    apt update
-    apt install python3-virtualenv
     python -m venv .venv
     ./.venv/Scripts/activate
     pip install -r requirements.txt

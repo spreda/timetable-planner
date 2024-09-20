@@ -1,3 +1,5 @@
+import { ButtonRow } from "./UIComponents/Buttons.js";
+
 let courses = [
     { id: 1, name: 'Математика', professor: 'Др. Смирнов' },
     { id: 2, name: 'Физика', professor: 'Др. Иванов' },
@@ -28,8 +30,8 @@ class Schedule {
     }
 }
 
-function listView(schedule, timetable) {
-    timetable.innerHTML = `
+function listView(schedule, timetableContainer) {
+    timetableContainer.innerHTML = `
         <div class="card-header bg-info text-white">
             <h2 class="h4 mb-0">Текущее расписание</h2>
         </div>
@@ -76,8 +78,8 @@ function listView(schedule, timetable) {
 
 }
 
-function gridView(timeslots, timetable) {
-    timetable.innerHTML = `
+function gridView(schedule, timetableContainer) {
+    timetableContainer.innerHTML = `
         <div class="card-header bg-info text-white">
             <h2 class="h4 mb-0">Текущее расписание</h2>
         </div>
@@ -94,11 +96,11 @@ function gridView(timeslots, timetable) {
                     <th>Суббота</th>
                 </tr>
                 </thead>
-                <tbody id="timetableBody">
+                <tbody id="timetable-body">
                 </tbody>
             </table>
         </div>`
-    const timetableBody = document.getElementById('timetableBody');
+    const timetableBody = document.getElementById('timetable-body');
     schedule.groups.forEach(group => {
         const slots = schedule.timeslots.find(s => s.groupId === parseInt(group.id));
         console.log(group.name, slots);
@@ -113,9 +115,9 @@ function gridView(timeslots, timetable) {
 }
 
 function updateCourseSelect() {
-    lessonDate = document.getElementById('lessonDate');
+    let lessonDate = document.getElementById('lessonDate');
     lessonDate.value = new Date().toISOString().substring(0, 10);
-    courseSelect = document.getElementById('timeslotCourseId');
+    let courseSelect = document.getElementById('timeslotCourseId');
     courseSelect.innerHTML = '<option value="" disabled selected>Предмет</option>';
     courses.forEach(course => {
         const option = document.createElement('option');
@@ -131,16 +133,6 @@ function deleteTimeslot(id) {
 }
 
 function initApp() {
-//    document.getElementById('courseForm').addEventListener('submit', function(e) {
-//        e.preventDefault();
-//        const name = document.getElementById('courseName').value;
-//        const professor = document.getElementById('courseProfessor').value;
-//        courses.push({ id: courses.length + 1, name, professor });
-//        this.reset();
-//        updateCourseSelect();
-//        renderTimetable();
-//    });
-
     document.getElementById('timeslotForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const newTimeslot = {
@@ -156,52 +148,29 @@ function initApp() {
         renderTimetable();
     });
 
-    schedule = new Schedule(courses, groups, timeslots);
+    let schedule = new Schedule(courses, groups, timeslots);
+
+    let btnRow = new ButtonRow([
+        {id: 'group-view-btn'},
+        {id: 'prof-view-btn'},
+        {id: 'room-view-btn'},
+    ]);
     
-    const listViewBtn = document.getElementById('list-view-btn');
-    const gridViewBtn = document.getElementById('grid-view-btn');
     const scheduleContainer = document.getElementById('schedule-container');
 
-    listViewBtn.addEventListener('click', function() {
-        scheduleContainer.classList.remove('grid-view');
-        scheduleContainer.classList.add('list-view');
-        setActiveButton(listViewBtn);
-    });
-
-    gridViewBtn.addEventListener('click', function() {
-        scheduleContainer.classList.remove('list-view');
-        scheduleContainer.classList.add('grid-view');
-        setActiveButton(gridViewBtn);
-    });
-
-    function setActiveButton(activeButton) {
-        listViewBtn.classList.remove('active');
-        gridViewBtn.classList.remove('active');
-        activeButton.classList.add('active');
-    }
-
-    listViewBtn.addEventListener('click', function() {
-    scheduleContainer.classList.remove('grid-view');
-    scheduleContainer.classList.add('list-view');
-    listView(schedule, scheduleContainer); // Обновляем HTML для списка
-    setActiveButton(listViewBtn);
-    });
-
-    gridViewBtn.addEventListener('click', function() {
-    scheduleContainer.classList.remove('list-view');
-    scheduleContainer.classList.add('grid-view');
-    gridView(schedule, scheduleContainer); // Обновляем HTML для сетки
-    setActiveButton(gridViewBtn);
-    });
-
-    function setActiveButton(activeButton) {
-    listViewBtn.classList.remove('active');
-    gridViewBtn.classList.remove('active');
-    activeButton.classList.add('active');
-    }
+    let viewSelect = new ButtonRow([
+        {id: 'grid-view-btn', callback: () => {
+            scheduleContainer.classList.toggle('grid-view');
+            gridView(schedule, scheduleContainer)
+        }},
+        {id: 'list-view-btn', callback: () => {
+            scheduleContainer.classList.toggle('list-view');
+            listView(schedule, scheduleContainer);
+        }},
+    ]);
 
     // По умолчанию устанавливаем вид сетки
-    gridViewBtn.click();
+    viewSelect.setActiveButton(0);
 
     updateCourseSelect();
 }
