@@ -30,13 +30,13 @@ function initApp() {
         return shiftEntry;
     });
 
-    const tableView = new TableView(scheduleElement,
+    const tableView = new TableView(
+        scheduleElement,
         shiftHeaders,
         shiftDisplayHeaders,
-        [],
         shiftData,
         'Расписание смен',
-        'Сентябрь',
+        //'Сентябрь',
         {'table': 'table-striped table table-bordered'}
     );
     tableView.render();

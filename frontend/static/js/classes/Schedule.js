@@ -51,6 +51,19 @@ export class Schedule {
       this.lecturers = lecturers;
       this.shifts = shifts;
     }
+
+    loadData() {
+        const savedData = JSON.parse(localStorage.getItem('scheduleData'));
+        if (savedData) {
+            Object.assign(this, savedData); // Merge saved data into this instance
+        }
+    }
+
+    saveData() {
+        localStorage.setItem('scheduleData', JSON.stringify(this));
+    }
 }
 
 export let schedule = new Schedule(courses, groups, rooms, timeslots, lecturers, shifts);
+schedule.loadData();
+console.log('test');

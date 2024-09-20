@@ -15,20 +15,22 @@ function initApp() {
         scheduleElement,
         headers,
         headers,
-        [],
         currentData,
     );
 
     let viewSwitch = new ButtonRow([
         {id: views[0], callback: () => {
+            schedule.saveData();
             tableView.updateHeaders(Object.keys(data[0][0]));
             tableView.updateData(data[0]);
         }},
         {id: views[1], callback: () => {
+            schedule.saveData();
             tableView.updateHeaders(Object.keys(data[1][0]));
             tableView.updateData(data[1]);
         }},
         {id: views[2], callback: () => {
+            schedule.saveData();
             tableView.updateHeaders(Object.keys(data[2][0]));
             tableView.updateData(data[2]);
         }},

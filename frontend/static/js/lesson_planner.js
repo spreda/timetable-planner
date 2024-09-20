@@ -129,7 +129,6 @@ function initApp() {
         scheduleElement,
         tableViewHeaders,
         tableViewDisplayHeaders,
-        [],
         tableViewData,
         'Текущее расписание'
     );
