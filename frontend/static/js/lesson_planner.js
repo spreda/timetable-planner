@@ -1,4 +1,4 @@
-import { Schedule, schedule } from "./classes/Schedule.js";
+import { schedule } from "./classes/Schedule.js";
 import { ButtonRow } from "./UIComponents/Buttons.js";
 import { TableView } from "./UIComponents/TableView.js";
 
@@ -129,6 +129,7 @@ function initApp() {
         scheduleElement,
         tableViewHeaders,
         tableViewDisplayHeaders,
+        [],
         tableViewData,
         'Текущее расписание'
     );

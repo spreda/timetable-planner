@@ -35,8 +35,10 @@ app.mount("/static", StaticFiles(directory="../frontend/static"), name="static")
 # Create database tables
 Base.metadata.create_all(bind=engine)
 
-@app.get("/{page_name}", response_class=HTMLResponse)
-async def render(page_name, request: Request):
+@app.get("/{page_name:path}", response_class=HTMLResponse)
+async def render(page_name: str, request: Request):
+    if page_name == "":
+        page_name = "index.html"
     return templates.TemplateResponse(f"{page_name}", {"request": request}, mimetypes=custom_mimetype)
 
 routes: list = [

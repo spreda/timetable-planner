@@ -1,4 +1,4 @@
-import { Schedule, schedule } from "./classes/Schedule.js";
+import { schedule } from "./classes/Schedule.js";
 import { TableView } from "./UIComponents/TableView.js";
 
 function getDaysAndWeekdaysInCurrentMonth() {
@@ -33,6 +33,7 @@ function initApp() {
     const tableView = new TableView(scheduleElement,
         shiftHeaders,
         shiftDisplayHeaders,
+        [],
         shiftData,
         'Расписание смен',
         'Сентябрь',

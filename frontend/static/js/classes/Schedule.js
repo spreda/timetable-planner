@@ -17,9 +17,17 @@ let groups = [
     { id: 11, name: '1ИС30п' },
 ];
 
+let rooms = [
+    { id: 0, name: '305', building: 'Гл (ИндИ)', "type": "Учебная аудитория" },
+    { id: 1, name: '325', building: 'Гл (ИндИ)', "type": "Учебная аудитория" },
+    { id: 2, name: '323', building: 'Гл (ИндИ)', "type": "Учебная аудитория" },
+    { id: 3, name: 'СЗ', building: 'Гл (ИндИ)', "type": "Спортивный зал" },
+    { id: 4, name: '301', building: 'Гл (ИндИ)', "type": "Компьютерный класс" },
+];
+
 let timeslots = [
-    { id: 1, date: '16.09.2024', type: 'Лекция', courseId: 1, room: 'A101', groupId: 8 },
-    { id: 2, date: '16.09.2024', type: 'Практическое занятие', courseId: 2, room: 'B202', groupId: 9 },
+    { id: 1, date: '16.09.2024', type: 'Лекция', courseId: 1, room: '101', groupId: 8 },
+    { id: 2, date: '16.09.2024', type: 'Практическое занятие', courseId: 2, room: '202', groupId: 9 },
 ];
 
 let lecturers = [
@@ -35,13 +43,14 @@ let shifts = {
 };
 
 export class Schedule {
-    constructor(courses, groups, timeslots, lecturers, shifts) {
+    constructor(courses, groups, rooms, timeslots, lecturers, shifts) {
       this.courses = courses;
       this.groups = groups;
+      this.rooms = rooms;
       this.timeslots = timeslots;
       this.lecturers = lecturers;
       this.shifts = shifts;
     }
 }
 
-export let schedule = new Schedule(courses, groups, timeslots, lecturers, shifts);
+export let schedule = new Schedule(courses, groups, rooms, timeslots, lecturers, shifts);
