@@ -1,3 +1,4 @@
+set DEBUG="true"
 if not exist .venv (
     python -m venv .venv 
     call ./.venv/Scripts/activate

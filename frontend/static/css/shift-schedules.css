@@ -12,10 +12,12 @@
 .table-staff th {
     border:10px твердый #303631;
     padding:5px;
-    background:#22B978;
+    background:#0b9c5b;
+    color: #fff;
     font-weight: 700;
     width: 2ch;
     text-align: center;
+    vertical-align: center;
 }
 
 .table-staff th:first-child {

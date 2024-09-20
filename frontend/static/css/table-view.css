@@ -1,0 +1,28 @@
+.table-view {
+    border-collapse: collapse;
+    table-layout: fixed;
+    width: 100%;
+    margin: 0 auto;
+    border:1px твердый #303631;
+    border-collapse:коллапс;
+    padding:5px;
+    padding-left: 20px;
+}
+
+.table-view th {
+    color: #505c6d;
+}
+
+.table-view th, td {
+    overflow: hidden;
+    white-space: nowrap;/
+}
+
+.table-view .first-column {
+    white-space: nowrap;
+    width: 8ch;
+}
+
+.table-view .other-column {
+    width: 150px;
+}
