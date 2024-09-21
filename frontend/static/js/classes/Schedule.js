@@ -55,7 +55,7 @@ export class Schedule {
     loadData() {
         const savedData = JSON.parse(localStorage.getItem('scheduleData'));
         if (savedData) {
-            Object.assign(this, savedData); // Merge saved data into this instance
+            Object.assign(this, savedData); // Объединить сохранённые данные с этим экземпляром
         }
     }
 
@@ -66,4 +66,3 @@ export class Schedule {
 
 export let schedule = new Schedule(courses, groups, rooms, timeslots, lecturers, shifts);
 schedule.loadData();
-console.log('test');

@@ -25,7 +25,7 @@ function initApp() {
     const shiftData = schedule.lecturers.map(lecturer => {
         const shiftEntry = { 'name': lecturer.name };
         for (let day of dayNumbers) {
-            shiftEntry[day] = schedule.shifts[lecturer.id]?.[day] || ''; // Set shift value or empty string
+            shiftEntry[day] = schedule.shifts[lecturer.id]?.[day] || '';
         }
         return shiftEntry;
     });
@@ -35,8 +35,7 @@ function initApp() {
         shiftHeaders,
         shiftDisplayHeaders,
         shiftData,
-        'Расписание смен',
-        //'Сентябрь',
+        'Расписание смен на сентябрь',
         {'table': 'table-striped table table-bordered'}
     );
     tableView.render();
