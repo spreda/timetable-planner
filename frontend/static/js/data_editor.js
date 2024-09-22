@@ -1,40 +1,48 @@
 import { schedule } from "./classes/Schedule.js";
 import { ButtonRow } from "./UIComponents/Buttons.js";
-import { TableView } from "./UIComponents/TableView.js";
+import { TableView, CELL_EDIT_EVENT } from "./UIComponents/TableView.js";
 
 function initApp() {
-    const views = ['group-view-btn', 'prof-view-btn', 'room-view-btn'];
+    const viewDataMappings = [
+        { id: 'group-view-btn', data: schedule.groups },
+        { id: 'prof-view-btn', data: schedule.lecturers },
+        { id: 'room-view-btn', data: schedule.rooms },
+    ];
 
-    let data = [schedule.groups, schedule.lecturers, schedule.rooms];
-    let currentData = data[0];
-
-    const scheduleElement = document.getElementById('table-container');
-    let headers =  Object.keys(currentData[0]);
+    const tableContainer = document.getElementById('table-container');
     
-    let tableView = new TableView(
-        scheduleElement,
-        headers,
-        headers,
-        currentData,
-    );
+    // Инициализация с первого представления в массиве (список групп)
+    const initialView = viewDataMappings[0];
+    let currentViewData = initialView.data;
 
-    let viewSwitch = new ButtonRow([
-        {id: views[0], callback: () => {
-            schedule.saveData();
-            tableView.updateHeaders(Object.keys(data[0][0]));
-            tableView.updateData(data[0]);
-        }},
-        {id: views[1], callback: () => {
-            schedule.saveData();
-            tableView.updateHeaders(Object.keys(data[1][0]));
-            tableView.updateData(data[1]);
-        }},
-        {id: views[2], callback: () => {
-            schedule.saveData();
-            tableView.updateHeaders(Object.keys(data[2][0]));
-            tableView.updateData(data[2]);
-        }},
-    ]);
+    const headers = Object.keys(currentViewData[0]);
+    let tableView = new TableView(tableContainer, headers, headers, currentViewData);
+    
+    // Сохранение данных после редактирования ячейки
+    tableContainer.addEventListener(CELL_EDIT_EVENT, () => {
+        schedule.saveData();
+    });
+    
+    schedule.addObserver(tableView);
+
+   // Создание кнопок для выбора редактируемых данных
+    new ButtonRow(viewDataMappings.map(({ id, data }) => ({
+        id,
+        callback: () => {
+            tableView.updateHeaders(Object.keys(data[0]));
+            tableView.updateData(data);
+        }
+    })));
+
+    
+    // Сохранение данных при закрытии страницы
+    window.addEventListener('beforeunload', (event) => {
+        document.activeElement.blur();
+        return;
+
+        // Included for legacy support, e.g. Chrome/Edge < 119
+        event.returnValue = true;
+    });
 }
 
 // Запускаем приложение после загрузки DOM

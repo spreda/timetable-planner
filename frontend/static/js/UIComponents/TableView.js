@@ -1,3 +1,7 @@
+// Константы для имен событий
+export const CELL_EDIT_EVENT = 'cellEdit';
+
+// Отвечает за отображение данных в виде таблицы.
 export class TableView {
     constructor(tableElement, headers = [], displayNames = [], data = [], title = '', classConfig = {}) {
         this.tableElement = tableElement;
@@ -9,6 +13,8 @@ export class TableView {
             table: classConfig.table || 'table table-bordered',
             thead: classConfig.thead || 'table-light',
         };
+        
+        this.currentCell = null;
     }
 
     getDisplayName(index) {
@@ -16,6 +22,11 @@ export class TableView {
     }
 
     render() {
+        if (!this.data.length) {
+            console.warn('Ошибка: нет данных')
+            return;
+        }
+
         this.tableElement.innerHTML = `
             ${this.title ? `<div class="card-header bg-info text-white"><h2 class="h4 mb-0">${this.title}</h2></div>` : ''}
             <div class="card-body">
@@ -40,21 +51,61 @@ export class TableView {
             </div>
         `;
 
-        this.tableElement.querySelector('#table-body').addEventListener('blur', (event) => {
-            if (event.target.tagName === 'TD') {
-                const { row, header } = event.target.dataset;
-                this.data[row][header] = event.target.innerText;a
-                schedule.saveData();
+        const tbody = this.tableElement.querySelector('#table-body');
+
+        tbody.addEventListener('focus', (event) => {
+            const cell = event.target.closest('td');
+            if (cell) {
+                this.currentCell = cell;
             }
         }, true);
+
+        tbody.addEventListener('blur', (event) => {
+            const cell = event.target.closest('td');
+            if (cell) {
+                const { row, header } = cell.dataset;
+                this.updateCell(row, header, cell.innerText);
+                this.currentCell = null;
+            }
+        }, true);
+
+        tbody.addEventListener('keydown', (event) => {
+            const cell = event.target.closest('td');
+            if (!cell) return;
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                cell.blur();
+            }
+        });
+    }
+
+    handleCellEdit() {
+        const event = new Event(CELL_EDIT_EVENT);
+        this.tableElement.dispatchEvent(event);
+    }
+
+    updateCell(rowIndex, header, newValue) {
+        if (this.data[rowIndex][header] != newValue) {
+            console.log(`TableView: cell update row=${rowIndex}, header=${header}, newValue=${newValue}`);
+            this.data[rowIndex][header] = newValue;
+            this.render();
+            this.handleCellEdit();
+        }
+    }
+    
+    update() {
+        console.log(`TableView: Таблица обновлена:`);
+        this.render();
     }
 
     updateData(newData) {
+        console.log(`TableView: Данные таблицы обновлены:`);
         this.data = newData;
         this.render();
     }
 
     updateHeaders(newHeaders) {
+        console.log(`TableView: Заголовки таблицы обновлены:`);
         this.headers = newHeaders;
         this.render();
     }

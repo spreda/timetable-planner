@@ -42,27 +42,107 @@ let shifts = {
     0: { 1: '+', 2: '-', 3: '-', 4: '+', 5: '-', 6: '+', 7: '-', 8: '+' },
 };
 
+// Управляет данными расписания
 export class Schedule {
     constructor(courses, groups, rooms, timeslots, lecturers, shifts) {
-      this.courses = courses;
-      this.groups = groups;
-      this.rooms = rooms;
-      this.timeslots = timeslots;
-      this.lecturers = lecturers;
-      this.shifts = shifts;
+        this.courses = courses;
+        this.groups = groups;
+        this.rooms = rooms;
+        this.timeslots = timeslots;
+        this.lecturers = lecturers;
+        this.shifts = shifts;
+        this.observers = [];
+        this.loadData();
+        this.saveTimeout = null;
+
+        // Сохранение при закрытии страницы
+        window.addEventListener('beforeunload', () => {
+            this.saveData();
+        });
+
+        // Автосохранение с заданным интервалом
+        this.autoSaveInterval = setInterval(() => {
+            this.saveData();
+        }, 5000);
+    }
+
+    exportData() {
+        return JSON.stringify({
+            'courses': this.courses,
+            'groups': this.groups,
+            'rooms': this.rooms,
+            'timeslots': this.timeslots,
+            'lecturers': this.lecturers,
+            'shifts': this.shifts,
+        });
+    }
+
+    importData(data) {
+        if (typeof data === 'string') {
+            data = JSON.parse(data);
+        }
+        if (typeof data === 'object') {
+            this.courses = data.courses;
+            this.groups = data.groups;
+            this.rooms = data.rooms;
+            this.timeslots = data.timeslots;
+            this.lecturers = data.lecturers;
+            this.shifts = data.shifts;
+
+            console.log('Schedule: данные импортированы');
+            this.notifyObservers();
+        } else {
+            console.warn('Schedule: импорт не удался');
+        }
+    }
+
+    addObserver(observer) {
+        if (typeof observer.update === 'function') {
+            console.log(`Schedule: добавлен observer: ${ observer.constructor.name}`);
+            this.observers.push(observer);
+        } else {
+            console.warn('Observer does not implement the update method:', observer);
+        }
+    }
+
+    removeObserver(observer) {
+        console.log(`Schedule: removed observer: ${ observer.constructor.name}`);
+        this.observers = this.observers.filter(obs => obs !== observer);
+    }
+
+    notifyObservers() {
+        this.observers.forEach(observer => {
+            console.log(`Schedule: уведомление`, observer.constructor.name);
+            observer.update();
+        });
     }
 
     loadData() {
         const savedData = JSON.parse(localStorage.getItem('scheduleData'));
         if (savedData) {
-            Object.assign(this, savedData); // Объединить сохранённые данные с этим экземпляром
+            this.importData(savedData);
+            console.log('Schedule: данные загружены');
         }
     }
 
     saveData() {
-        localStorage.setItem('scheduleData', JSON.stringify(this));
+        clearTimeout(this.saveTimeout);
+        if (this.exportData() != localStorage.getItem('scheduleData')) {
+            localStorage.setItem('scheduleData', this.exportData());
+            console.log('Schedule: данные сохранены');
+        }
+    }
+    
+    updateField(entityType, id, field, value) {
+        const entity = this.data[entityType][id];
+        if (!entity) {
+            console.warn(`Сущность с ID ${id} не найдена в ${entityType}.`);   
+        }
+        if (entity[field] !== value) {
+            entity[field] = value;
+            this.saveData();
+        }
     }
 }
 
 export let schedule = new Schedule(courses, groups, rooms, timeslots, lecturers, shifts);
-schedule.loadData();
