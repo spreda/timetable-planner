@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Планировщик расписания</title>
+    <link href="static/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="static/bootstrap/bootstrap-icons.css" rel="stylesheet">
+    <link href="static/css/styles.css" rel="stylesheet">
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand navbar-light bg-light">
+        <div class="container-fluid">
+            <div class="d-flex flex-wrap align-items-center">
+                <a class="navbar-brand me-4" href="/index.html">Логотип</a>
+                <div class="navbar-nav flex-wrap">
+                    <a class="nav-link" href="/index.html">Расписание</a>
+                    <a class="nav-link" href="/shift_schedules.html">График преподавателей</a>
+                    <a class="nav-link" href="/data_editor.html">Редактирование данных</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>   
+<div class="container-fluid mt-4">
+{% include page_name %}
+</div>
+<script src="static/bootstrap/bootstrap.bundle.min.js"></script>
+{% if DEBUG %}
+    <!-- Hot reload script -->
+    {{ hotreload.script(url_for('hot-reload')) | safe }}
+{% endif %}
+</body>
+</html>
