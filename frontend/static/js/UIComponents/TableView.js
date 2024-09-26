@@ -10,7 +10,7 @@ export class TableView {
         this.data = data;
         this.title = title;
         this.classConfig = {
-            table: classConfig.table || 'table table-bordered',
+            table: classConfig.table || 'table table-bordered table-hover rounded-3 overflow-hidden',
             thead: classConfig.thead || 'table-active',
         };
         

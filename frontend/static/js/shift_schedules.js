@@ -36,7 +36,6 @@ function initApp() {
         shiftDisplayHeaders,
         shiftData,
         'Расписание смен на сентябрь',
-        {'table': 'table-striped table table-bordered'}
     );
     tableView.render();
 }

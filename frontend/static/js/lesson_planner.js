@@ -4,7 +4,7 @@ import { TableView } from "./UIComponents/TableView.js";
 
 function listView(schedule, timetableElement) {
     timetableElement.innerHTML = `
-        <div class="card-header bg-info text-white">
+        <div class="card-header">
             <h2 class="h4 mb-0">Текущее расписание</h2>
         </div>
         <div class="card-body">
