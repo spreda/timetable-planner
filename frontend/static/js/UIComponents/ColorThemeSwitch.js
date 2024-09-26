@@ -12,7 +12,6 @@ export class ColorThemeSwitch {
         }));
 
         this.theme = this.getPreferredTheme();
-        console.log(this.theme);
         this.setTheme(this.theme);
     }
 
