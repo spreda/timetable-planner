@@ -24,11 +24,11 @@
 }
 
 .timetable-row:nth-child(even) {
-    background-color: #f8f9fa;
+    background-color: var(--bs-gray-100);
 }
 
 .timetable-row:hover {
-    background-color: #e9ecef;
+    background-color: var(--bs-gray-200);
 }
 
 .table caption {
@@ -42,7 +42,7 @@
 
 .list-view ul.schedule-list li {
     padding: 10px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--bs-gray-300);
 }
 
 .table-view .schedule-grid {
@@ -53,22 +53,17 @@
 
 .table-view .schedule-grid div {
     padding: 20px;
-    background-color: #f0f0f0;
-    border: 1px solid #ddd;
+    background-color: var(--bs-gray-200);
+    border: 1px solid var(--bs-gray-300);
 }
 
 .btn-group .btn {
-    background-color: #ffffff;
-    color:#343a40
+    background-color: var(--bs-body-bg);
+    color:var(--bs-dark-text);
 }
 
 .btn-group .btn.active, .btn:hover {
     background-color: #22b272;
     border-color: #22b272;
-    color: white;
-}
-
-.bg-info {
-    background-color:#ffffff !important;
-    color:#343a40 !important;
+    color: var(--bs-white);
 }

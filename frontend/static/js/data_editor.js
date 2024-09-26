@@ -2,7 +2,7 @@ import { schedule } from "./classes/Schedule.js";
 import { ButtonRow } from "./UIComponents/Buttons.js";
 import { TableView, CELL_EDIT_EVENT } from "./UIComponents/TableView.js";
 
-function initApp() {
+function initApp() {    
     const viewDataMappings = [
         { id: 'group-view-btn', data: schedule.groups },
         { id: 'prof-view-btn', data: schedule.lecturers },
@@ -33,7 +33,6 @@ function initApp() {
             tableView.updateData(data);
         }
     })));
-
     
     // Сохранение данных при закрытии страницы
     window.addEventListener('beforeunload', (event) => {

@@ -7,10 +7,17 @@
     <link href="static/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="static/bootstrap/bootstrap-icons.css" rel="stylesheet">
     <link href="static/css/styles.css" rel="stylesheet">
+    <link rel="icon" href="static/img/favicon.ico" type="image/x-icon">
+    <script>
+        // Применение темы перед отображением страницы
+        if (localStorage.getItem('theme') === 'dark') {
+          document.documentElement.setAttribute('data-bs-theme', 'dark');
+        }
+    </script>
 </head>
 <body>
 <header>
-    <nav class="navbar navbar-expand navbar-light bg-light">
+    <nav class="navbar navbar-expand">
         <div class="container-fluid">
             <div class="d-flex flex-wrap align-items-center">
                 <a class="navbar-brand me-4" href="/index.html">Логотип</a>
@@ -20,12 +27,14 @@
                     <a class="nav-link" href="/data_editor.html">Редактирование данных</a>
                 </div>
             </div>
+            <div class="form-switch row" id="theme-switch-container"></div>
         </div>
     </nav>
 </header>   
 <div class="container-fluid mt-4">
 {% include page_name %}
 </div>
+<script src="static/js/main.js" type="module"></script>
 <script src="static/bootstrap/bootstrap.bundle.min.js"></script>
 {% if DEBUG %}
     <!-- Hot reload script -->

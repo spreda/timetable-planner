@@ -11,7 +11,7 @@ export class TableView {
         this.title = title;
         this.classConfig = {
             table: classConfig.table || 'table table-bordered',
-            thead: classConfig.thead || 'table-light',
+            thead: classConfig.thead || 'table-active',
         };
         
         this.currentCell = null;
@@ -28,7 +28,7 @@ export class TableView {
         }
 
         this.tableElement.innerHTML = `
-            ${this.title ? `<div class="card-header bg-info text-white"><h2 class="h4 mb-0">${this.title}</h2></div>` : ''}
+            ${this.title ? `<div class="card-header"><h2 class="h4 mb-0">${this.title}</h2></div>` : ''}
             <div class="card-body">
                 <table class="${this.classConfig.table}">
                     <thead class="${this.classConfig.thead}">
