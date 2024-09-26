@@ -1,5 +1,6 @@
 import { schedule } from "./classes/Schedule.js";
 import { ButtonRow } from "./UIComponents/Buttons.js";
+import { DeleteButton } from "./UIComponents/DeleteButton.js";
 import { TableView, CELL_EDIT_EVENT } from "./UIComponents/TableView.js";
 
 function initApp() {    
@@ -8,6 +9,12 @@ function initApp() {
         { id: 'prof-view-btn', data: schedule.lecturers },
         { id: 'room-view-btn', data: schedule.rooms },
     ];
+
+    const viewEditMappings = {
+        'group-view-btn': [{id: '+', name: '+'}],
+        'prof-view-btn': [{id: '+', name: '+'}],
+        'room-view-btn': [{id: '+', name: '+'}],
+    };
 
     const tableContainer = document.getElementById('table-container');
     
@@ -29,8 +36,16 @@ function initApp() {
     new ButtonRow(viewDataMappings.map(({ id, data }) => ({
         id,
         callback: () => {
-            tableView.updateHeaders(Object.keys(data[0]));
-            tableView.updateData(data);
+            tableView.updateHeaders(Object.keys(data[0]).concat(['actions']));
+            let viewData = structuredClone(data);
+            viewData.forEach(row => {
+                row.actions = `<button id="delete-id-${row.id}");"></button>`;
+            });
+            viewData = viewEditMappings[id].concat(viewData);
+            tableView.updateData(viewData);
+            data.forEach(row => {
+                const deleteBtn = new  DeleteButton(`delete-id-${row.id}`);
+            });
         }
     })));
     
@@ -38,9 +53,6 @@ function initApp() {
     window.addEventListener('beforeunload', (event) => {
         document.activeElement.blur();
         return;
-
-        // Included for legacy support, e.g. Chrome/Edge < 119
-        event.returnValue = true;
     });
 }
 

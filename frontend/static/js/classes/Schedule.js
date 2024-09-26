@@ -143,6 +143,15 @@ export class Schedule {
             this.saveData();
         }
     }
+    
+    deleteEntity(entityType, id) {
+        const entityList = this.data[entityType];
+        if (!entityList) {
+            entityList = entityList.filter(entity => entity.id !== id);
+            this.notifyObservers();
+            this.saveData();
+        }
+    }
 }
 
 export let schedule = new Schedule(courses, groups, rooms, timeslots, lecturers, shifts);

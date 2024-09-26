@@ -63,11 +63,6 @@ function updateCourseSelect() {
     });
 }
 
-function deleteTimeslot(id) {
-    timeslots = timeslots.filter(slot => slot.id !== id);
-    renderTimetable();
-}
-
 let parseDate = (dateStr) => {
     const [day, month, year] = dateStr.split('.').map(Number);
     return new Date(year, month - 1, day); 
