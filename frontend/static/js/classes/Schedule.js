@@ -107,7 +107,7 @@ export class Schedule {
         this.lecturers = lecturers;
         this.shifts = shifts;
         this.observers = [];
-        //this.loadData();
+        this.loadData();
         this.saveTimeout = null;
 
         // Сохранение при закрытии страницы
