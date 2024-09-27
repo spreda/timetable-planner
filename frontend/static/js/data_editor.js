@@ -1,7 +1,7 @@
 import { schedule } from "./classes/Schedule.js";
 import { ButtonRow } from "./UIComponents/Buttons.js";
 import { DeleteButton } from "./UIComponents/DeleteButton.js";
-import { TableView, CELL_EDIT_EVENT } from "./UIComponents/TableView.js";
+import { TableView, ColumnConfig, CELL_EDIT_EVENT } from "./UIComponents/TableView.js";
 
 function initApp() {    
     const viewDataMappings = [
@@ -10,12 +10,6 @@ function initApp() {
         { id: 'room-view-btn', data: schedule.rooms },
     ];
 
-    const viewEditMappings = {
-        'group-view-btn': [{id: '+', name: '+'}],
-        'prof-view-btn': [{id: '+', name: '+'}],
-        'room-view-btn': [{id: '+', name: '+'}],
-    };
-
     const tableContainer = document.getElementById('table-container');
     
     // Инициализация с первого представления в массиве (список групп)
@@ -23,7 +17,7 @@ function initApp() {
     let currentViewData = initialView.data;
 
     const headers = Object.keys(currentViewData[0]);
-    let tableView = new TableView(tableContainer, headers, headers, currentViewData);
+    let tableView = new TableView(tableContainer, currentViewData);
     
     // Сохранение данных после редактирования ячейки
     tableContainer.addEventListener(CELL_EDIT_EVENT, () => {
@@ -36,16 +30,8 @@ function initApp() {
     new ButtonRow(viewDataMappings.map(({ id, data }) => ({
         id,
         callback: () => {
-            tableView.updateHeaders(Object.keys(data[0]).concat(['actions']));
             let viewData = structuredClone(data);
-            viewData.forEach(row => {
-                row.actions = `<button id="delete-id-${row.id}");"></button>`;
-            });
-            viewData = viewEditMappings[id].concat(viewData);
             tableView.updateData(viewData);
-            data.forEach(row => {
-                const deleteBtn = new  DeleteButton(`delete-id-${row.id}`);
-            });
         }
     })));
     

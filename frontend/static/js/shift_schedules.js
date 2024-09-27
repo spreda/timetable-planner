@@ -1,5 +1,5 @@
 import { schedule } from "./classes/Schedule.js";
-import { TableView } from "./UIComponents/TableView.js";
+import { TableView, ColumnConfig } from "./UIComponents/TableView.js";
 
 function getDaysAndWeekdaysInCurrentMonth() {
     const now = new Date();
@@ -19,8 +19,19 @@ function initApp() {
     const scheduleElement = document.getElementById('schedule-container');
     const dayNumbers = Array.from({ length: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate() }, (_, i) => i + 1);
     
-    const shiftHeaders = ['name', ...dayNumbers];
-    const shiftDisplayHeaders = ['Преподаватели', ...getDaysAndWeekdaysInCurrentMonth()];
+    const shiftDisplayHeaders = getDaysAndWeekdaysInCurrentMonth();
+
+    let columnConfigs = new Map();
+
+    columnConfigs.set('name', new ColumnConfig({ header: 'Преподаватели' }));
+
+    // Создание конфигураций
+    dayNumbers.forEach((header, index) => {
+        columnConfigs.set(header, new ColumnConfig({
+            header: shiftDisplayHeaders[index], // Заголовок на русском
+            editable: true // Ячейки можно редактировать
+        }));
+    });
 
     const shiftData = schedule.lecturers.map(lecturer => {
         const shiftEntry = { 'name': lecturer.name };
@@ -29,12 +40,12 @@ function initApp() {
         }
         return shiftEntry;
     });
-
+    
+    console.log(columnConfigs)
     const tableView = new TableView(
         scheduleElement,
-        shiftHeaders,
-        shiftDisplayHeaders,
         shiftData,
+        columnConfigs,
         'Расписание смен на сентябрь',
     );
     tableView.render();

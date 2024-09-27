@@ -1,6 +1,6 @@
 import { schedule } from "./classes/Schedule.js";
 import { ButtonRow } from "./UIComponents/Buttons.js";
-import { TableView } from "./UIComponents/TableView.js";
+import { TableView, ColumnConfig } from "./UIComponents/TableView.js";
 
 function listView(schedule, timetableElement) {
     timetableElement.innerHTML = `
@@ -84,7 +84,7 @@ function initApp() {
         renderTimetable();
     });
 
-    let btnRow = new ButtonRow([
+    new ButtonRow([
         {id: 'group-view-btn'},
         {id: 'prof-view-btn'},
         {id: 'room-view-btn'},
@@ -92,15 +92,12 @@ function initApp() {
     
     const scheduleElement = document.getElementById('schedule-container');
 
-    let daysOfWeek = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
-    let tableViewHeaders = [ 'name', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота']
-    let tableViewDisplayHeaders = [ 'Группа', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота']
+    let daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    let daysOfWeekRussian = [ 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
+    
     let tableViewData = schedule.groups.map(group => {
         let scheduleEntry = { name: group.name };
         
-        // Инициализация пустых звписей для каждого дня
-        daysOfWeek.forEach(day => scheduleEntry[day] = '');
-    
         // Заполнение расписания для группы
         schedule.timeslots.forEach(slot => {
             if (slot.groupId === group.id) {
@@ -120,15 +117,26 @@ function initApp() {
         return scheduleEntry;
     });
 
+    let columnConfigs = {
+        name: new ColumnConfig({ header: 'Группа' }),
+    };
+
+    // Создание конфигурации для каждого дня недели
+    daysOfWeek.forEach((day, index) => {
+        columnConfigs[day] = new ColumnConfig({
+            header: daysOfWeekRussian[index], // Заголовок на русском
+            editable: true // Ячейки можно редактировать
+        });
+    });
+
     let tableView = new TableView(
         scheduleElement,
-        tableViewHeaders,
-        tableViewDisplayHeaders,
         tableViewData,
+        columnConfigs,
         'Текущее расписание'
     );
 
-    let viewSelect = new ButtonRow([
+    new ButtonRow([
         {id: 'table-view-btn', callback: () => {
             scheduleElement.classList.toggle('table-view');
             tableView.render();

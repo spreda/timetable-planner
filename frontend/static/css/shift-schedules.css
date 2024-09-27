@@ -6,6 +6,7 @@
     border-collapse: collapse;
     padding: 5px;
     padding-left: 20px;
+    white-space: nowrap;
 }
 
 .table-staff th {

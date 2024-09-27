@@ -1,13 +1,22 @@
 // Константы для имен событий
 export const CELL_EDIT_EVENT = 'cellEdit';
 
+export class ColumnConfig {
+    constructor({ header, editable = true, type = 'text', dropdownOptions = [], action = null } = {}) {
+        this.header = header;
+        this.editable = editable;
+        this.type = type; // text, dropdown, button, etc.
+        this.dropdownOptions = dropdownOptions;
+        this.action = action; // действия для кнопок
+    }
+}
+
 // Отвечает за отображение данных в виде таблицы.
 export class TableView {
-    constructor(tableElement, headers = [], displayNames = [], data = [], title = '', classConfig = {}) {
+    constructor(tableElement, data = [], columnConfigs = new Map(), title = '', classConfig = {}) {
         this.tableElement = tableElement;
-        this.headers = headers;
-        this.displayNames = displayNames;
         this.data = data;
+        this.columnConfigs = columnConfigs instanceof Map ? columnConfigs : new Map(Object.entries(columnConfigs));
         this.title = title;
         this.classConfig = {
             table: classConfig.table || 'table table-bordered table-hover rounded-3 overflow-hidden',
@@ -17,15 +26,16 @@ export class TableView {
         this.currentCell = null;
     }
 
-    getDisplayName(index) {
-        return this.displayNames[index] || this.headers[index];
-    }
-
     render() {
         if (!this.data.length) {
             console.warn('Ошибка: нет данных')
             return;
         }
+
+        const configHeaders =  [...this.columnConfigs.keys()];
+        const headers = configHeaders.length ? configHeaders : Object.keys(this.data[0] || {});
+        
+        const displayHeaders = headers.map(name => this.columnConfigs.get(name)?.header ?? name);
 
         this.tableElement.innerHTML = `
             ${this.title ? `<div class="card-header"><h2 class="h4 mb-0">${this.title}</h2></div>` : ''}
@@ -33,13 +43,13 @@ export class TableView {
                 <table class="${this.classConfig.table}">
                     <thead class="${this.classConfig.thead}">
                         <tr>
-                            ${this.headers.map((header, index) => `<th>${this.getDisplayName(index)}</th>`).join('')}
+                            ${headers.map((header, index) => `<th>${displayHeaders[index]}</th>`).join('')}
                         </tr>
                     </thead>
                     <tbody id="table-body">
                         ${this.data.map((rowData, rowIndex) => `
                             <tr>
-                                ${this.headers.map((header) => `
+                                ${headers.map((header) => `
                                     <td contenteditable="true" data-row="${rowIndex}" data-header="${header}">
                                         ${rowData[header] ?? ''}
                                     </td>
@@ -101,12 +111,6 @@ export class TableView {
     updateData(newData) {
         console.log(`TableView: Данные таблицы обновлены:`);
         this.data = newData;
-        this.render();
-    }
-
-    updateHeaders(newHeaders) {
-        console.log(`TableView: Заголовки таблицы обновлены:`);
-        this.headers = newHeaders;
         this.render();
     }
 }

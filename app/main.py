@@ -27,7 +27,7 @@ if _debug := DEBUG:
         on_shutdown=[hotreload.shutdown],
     )
 else:
-    app = FastAPI(title="Schedule Planner")
+    app = FastAPI(title="Schedule Planner", debug=False)
 
 # Serve static pages
 app.mount("/static", StaticFiles(directory="../frontend/static"), name="static")
