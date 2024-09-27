@@ -2,11 +2,11 @@
 export const CELL_EDIT_EVENT = 'cellEdit';
 
 export class ColumnConfig {
-    constructor({ header, editable = true, type = 'text', dropdownOptions = [], action = null } = {}) {
+    constructor({ header, editable = false, type = 'text', dropdownOptions = [], action = null } = {}) {
         this.header = header;
         this.editable = editable;
         this.type = type; // text, dropdown, button, etc.
-        this.dropdownOptions = dropdownOptions;
+        this.dropdownOptions = Object.values(dropdownOptions);
         this.action = action; // действия для кнопок
     }
 }
@@ -34,7 +34,6 @@ export class TableView {
 
         const configHeaders =  [...this.columnConfigs.keys()];
         const headers = configHeaders.length ? configHeaders : Object.keys(this.data[0] || {});
-        
         const displayHeaders = headers.map(name => this.columnConfigs.get(name)?.header ?? name);
 
         this.tableElement.innerHTML = `
@@ -43,17 +42,19 @@ export class TableView {
                 <table class="${this.classConfig.table}">
                     <thead class="${this.classConfig.thead}">
                         <tr>
-                            ${headers.map((header, index) => `<th>${displayHeaders[index]}</th>`).join('')}
+                            ${displayHeaders.map((header) => `<th>${header}</th>`).join('')}
+                            ${this.hasActions() ? '<th>Actions</th>' : ''}
                         </tr>
                     </thead>
                     <tbody id="table-body">
                         ${this.data.map((rowData, rowIndex) => `
                             <tr>
                                 ${headers.map((header) => `
-                                    <td contenteditable="true" data-row="${rowIndex}" data-header="${header}">
-                                        ${rowData[header] ?? ''}
-                                    </td>
-                                `).join('')}
+                                    <td data-header="${header}" data-row="${rowIndex}">
+                                        ${this.renderCell(header, rowData[header], rowIndex)}
+                                    </td>`).join('')}
+                                
+                                ${this.hasActions() ? `<td>${this.renderActionButtons(rowIndex)}</td>` : ''}
                             </tr>
                         `).join('')}
                     </tbody>
@@ -61,32 +62,80 @@ export class TableView {
             </div>
         `;
 
-        const tbody = this.tableElement.querySelector('#table-body');
+        // Обработчики для редактирования ячеек и удаления строк
+        this.addEventListeners();
+    }
 
-        tbody.addEventListener('focus', (event) => {
-            const cell = event.target.closest('td');
-            if (cell) {
-                this.currentCell = cell;
-            }
-        }, true);
+    hasActions() {
+        return Object.values(this.columnConfigs).some(config => config.type === 'button' && config.action);
+    }
+
+    renderCell(header, value, rowIndex) {
+        const config = this.columnConfigs.get(header) || {};
+        if (config.type === 'dropdown' && config.dropdownOptions.length) {
+            return `
+                <select class="rounded-1" data-row="${rowIndex}" data-header="${header}">
+                    ${config.dropdownOptions.map(option => `
+                        <option value="${option}" ${option === value ? 'selected' : ''}>${option}</option>
+                    `).join('')}
+                </select>
+            `;
+        } else if (config.editable === true) {
+            return `<span contenteditable="true">${value ?? ''}</span>`;
+        } else {
+            return `<span>${value ?? ''}</span>`;
+        }
+    }
+
+    renderActionButtons(rowIndex) {
+        const actionConfig = Object.values(this.columnConfigs).find(config => config.type === 'button' && config.action);
+        return actionConfig ? `<button class="btn btn-danger btn-sm" data-row="${rowIndex}">${actionConfig.action.label}</button>` : '';
+    }
+
+    addEventListeners() {
+        const tbody = this.tableElement.querySelector('#table-body');
 
         tbody.addEventListener('blur', (event) => {
             const cell = event.target.closest('td');
-            if (cell) {
+            if (cell && event.target.nodeName === 'SPAN') {
                 const { row, header } = cell.dataset;
-                this.updateCell(row, header, cell.innerText);
-                this.currentCell = null;
+                const newValue = event.target.innerText;
+                this.updateCell(row, header, newValue);
             }
         }, true);
 
-        tbody.addEventListener('keydown', (event) => {
-            const cell = event.target.closest('td');
-            if (!cell) return;
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                cell.blur();
+        tbody.addEventListener('change', (event) => {
+            const select = event.target.closest('select');
+            if (select) {
+                const { row, header } = select.dataset;
+                const newValue = select.value;
+                this.updateCell(row, header, newValue);
+            }
+        }, true);
+
+        tbody.addEventListener('click', (event) => {
+            const button = event.target.closest('button');
+            if (button) {
+                const rowIndex = button.dataset.row;
+                const actionConfig = Object.values(this.columnConfigs).find(config => config.type === 'button' && config.action);
+                if (actionConfig && actionConfig.action.callback) {
+                    actionConfig.action.callback(rowIndex);
+                }
             }
         });
+        
+        tbody.addEventListener('keydown', (event) => {
+            const cell = document.activeElement.closest('td');
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                if (cell) {
+                    const activeElement = document.activeElement;
+                    if (activeElement) {
+                        activeElement.blur();
+                    }
+                }
+            }
+        }, true);
     }
 
     handleCellEdit() {
@@ -96,7 +145,7 @@ export class TableView {
 
     updateCell(rowIndex, header, newValue) {
         if (this.data[rowIndex][header] != newValue) {
-            console.log(`TableView: cell update row=${rowIndex}, header=${header}, newValue=${newValue}`);
+            console.log(`TableView: обновление ячейки row=${rowIndex}, header=${header}, newValue=${newValue}`);
             this.data[rowIndex][header] = newValue;
             this.render();
             this.handleCellEdit();

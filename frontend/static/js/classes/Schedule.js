@@ -25,6 +25,18 @@ let rooms = [
     { id: 4, name: '301', building: 'Гл (ИндИ)', "type": "Компьютерный класс" },
 ];
 
+
+let buildings = {
+    0: 'Гл (ИндИ)',
+    1: '2 (ИндИ)',
+}
+
+let room_types = {
+    0: 'Учебная аудитория',
+    1: 'Компьютерный класс',
+    2: 'Спортивный зал',
+}
+
 let timeslots = [
     { id: 1, date: '16.09.2024', type: 'Лекция', courseId: 1, room: '101', groupId: 8 },
     { id: 2, date: '16.09.2024', type: 'Практическое занятие', courseId: 2, room: '202', groupId: 9 },
@@ -44,10 +56,12 @@ let shifts = {
 
 // Управляет данными расписания
 export class Schedule {
-    constructor(courses, groups, rooms, timeslots, lecturers, shifts) {
+    constructor(courses, groups, rooms, buildings, room_types, timeslots, lecturers, shifts) {
         this.courses = courses;
         this.groups = groups;
         this.rooms = rooms;
+        this.buildings = buildings;
+        this.room_types = room_types;
         this.timeslots = timeslots;
         this.lecturers = lecturers;
         this.shifts = shifts;
@@ -154,4 +168,4 @@ export class Schedule {
     }
 }
 
-export let schedule = new Schedule(courses, groups, rooms, timeslots, lecturers, shifts);
+export let schedule = new Schedule(courses, groups, rooms, buildings, room_types, timeslots, lecturers, shifts);

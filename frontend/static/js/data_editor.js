@@ -5,9 +5,36 @@ import { TableView, ColumnConfig, CELL_EDIT_EVENT } from "./UIComponents/TableVi
 
 function initApp() {    
     const viewDataMappings = [
-        { id: 'group-view-btn', data: schedule.groups },
-        { id: 'prof-view-btn', data: schedule.lecturers },
-        { id: 'room-view-btn', data: schedule.rooms },
+        {
+            id: 'group-view-btn',
+            data: schedule.groups,
+            columnConfigs: {
+                id: new ColumnConfig(),
+                name: new ColumnConfig({ header: 'Группа', editable: true }),
+            }
+        },
+        {
+            id: 'prof-view-btn',
+            data: schedule.lecturers
+        },
+        {
+            id: 'room-view-btn',
+            data: schedule.rooms,
+            columnConfigs: {
+                id: new ColumnConfig(),
+                name: new ColumnConfig({ header: 'Номер', editable: true }),
+                building: new ColumnConfig({
+                    header: 'Корпус',
+                    type: 'dropdown',
+                    dropdownOptions: schedule.buildings
+                }),
+                type: new ColumnConfig({
+                    header: 'Тип аудитории',
+                    type: 'dropdown',
+                    dropdownOptions: schedule.room_types
+                }),
+            }
+        },
     ];
 
     const tableContainer = document.getElementById('table-container');
@@ -15,9 +42,10 @@ function initApp() {
     // Инициализация с первого представления в массиве (список групп)
     const initialView = viewDataMappings[0];
     let currentViewData = initialView.data;
+    let currentConfigs = initialView.columnConfigs;
 
     const headers = Object.keys(currentViewData[0]);
-    let tableView = new TableView(tableContainer, currentViewData);
+    let tableView = new TableView(tableContainer, currentViewData, currentConfigs);
     
     // Сохранение данных после редактирования ячейки
     tableContainer.addEventListener(CELL_EDIT_EVENT, () => {
@@ -27,11 +55,12 @@ function initApp() {
     schedule.addObserver(tableView);
 
    // Создание кнопок для выбора редактируемых данных
-    new ButtonRow(viewDataMappings.map(({ id, data }) => ({
+    new ButtonRow(viewDataMappings.map(({ id, data, columnConfigs }) => ({
         id,
         callback: () => {
-            let viewData = structuredClone(data);
-            tableView.updateData(viewData);
+            tableView = new TableView(tableContainer, data, columnConfigs);
+            tableView.render();
+    
         }
     })));
     
