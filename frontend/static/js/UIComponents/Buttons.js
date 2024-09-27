@@ -36,16 +36,17 @@ export class ButtonRow {
 
             button.buttonElement.addEventListener('click', () => this.setActiveButton(index));
         });
-        this.setActiveButton(0);
+
+        this.buttons[0].buttonElement.click();
     }
 
     setActiveButton(index) {
         if (index === this.activeIndex) return;
 
+        console.log(`setActiveButton(${index})`);
         if (this.activeIndex !== -1) {
             this.buttons[this.activeIndex].setInactive();
         }
-        this.buttons[index].handleClick();
         this.buttons[index].setActive();
         this.activeIndex = index;
 

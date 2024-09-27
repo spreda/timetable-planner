@@ -3,18 +3,14 @@
     table-layout: auto;
     width: auto;
     margin: 0 auto;
-    border:1px твердый #303631;
-    border-collapse:коллапс;
-    padding:5px;
+    border-collapse: collapse;
+    padding: 5px;
     padding-left: 20px;
-    font-weight: 700;
+    white-space: nowrap;
 }
+
 .table-staff th {
-    border:10px твердый #303631;
-    padding:5px;
-    background:#0b9c5b;
-    color: #fff;
-    font-weight: 700;
+    padding: 5px;
     width: 2ch;
     text-align: center;
     vertical-align: center;
@@ -26,9 +22,7 @@
 }
 
 .table-staff td {
-    border:1px твердый #303631;
-    padding:5px;
-    font-weight: 700;
+    padding: 5px;
     display: table-cell;
     vertical-align: middle;
 }

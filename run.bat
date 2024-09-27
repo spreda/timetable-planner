@@ -6,4 +6,4 @@ if not exist .venv (
     call ./.venv/Scripts/activate
 )
 cd app
-uvicorn main:app --reload
+uvicorn main:app

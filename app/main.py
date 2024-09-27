@@ -27,7 +27,7 @@ if _debug := DEBUG:
         on_shutdown=[hotreload.shutdown],
     )
 else:
-    app = FastAPI(title="Schedule Planner")
+    app = FastAPI(title="Schedule Planner", debug=False)
 
 # Serve static pages
 app.mount("/static", StaticFiles(directory="../frontend/static"), name="static")
@@ -39,7 +39,10 @@ Base.metadata.create_all(bind=engine)
 async def render(page_name: str, request: Request):
     if page_name == "":
         page_name = "index.html"
-    return templates.TemplateResponse(f"{page_name}", {"request": request}, mimetypes=custom_mimetype)
+    return templates.TemplateResponse(
+        f"base.html",
+        {"request": request, "page_name": page_name},
+        mimetypes=custom_mimetype)
 
 routes: list = [
     Route("/", render),
