@@ -15,7 +15,7 @@ export class ColumnConfig {
 export class TableView {
     constructor(tableElement, data = [], columnConfigs = new Map(), title = '', classConfig = {}) {
         this.tableElement = tableElement;
-        this.data = data;
+        this.data = Array.isArray(data) ? data : Object.values(data);
         this.columnConfigs = columnConfigs instanceof Map ? columnConfigs : new Map(Object.entries(columnConfigs));
         this.title = title;
         this.classConfig = {
@@ -27,7 +27,7 @@ export class TableView {
     }
 
     render() {
-        if (!this.data.length) {
+        if (!this.data.length && !Object.keys(this.data)) {
             console.warn('Ошибка: нет данных')
             return;
         }

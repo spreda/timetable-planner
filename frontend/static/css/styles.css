@@ -58,6 +58,21 @@
     border: 1px solid var(--bs-gray-300);
 }
 
+.grid-view td {
+    padding: 0.1rem !important;
+}
+
+.grid-view span td {
+    border: 0;
+    padding: 0.0rem !important;
+    padding-left: 0.2rem !important;
+    padding-right: 0.2rem !important;
+}
+
+.child-table tr {
+    background-color: transparent !important;
+}
+
 .btn-group .btn {
     background-color: var(--bs-body-bg);
     color: var(--bs-dark-text);

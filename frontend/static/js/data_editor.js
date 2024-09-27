@@ -69,6 +69,7 @@ function initApp() {
         document.activeElement.blur();
         return;
     });
+    
 }
 
 // Запускаем приложение после загрузки DOM
